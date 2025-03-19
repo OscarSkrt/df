@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align content to the top */
+            height: 100vh;
+            text-align: center;
+            padding-top: 10px; /* Reduced padding at the top */
+            background-color: #f8f9fa;
+            font-family: 'Roboto', sans-serif; /* Modern sans-serif font */
+            margin: 0; /* Remove any default margin */
+        }
+        table {
+            border-collapse: collapse;
+            width: 50%; /* Adjust width to make the board smaller */
+            height: 50%; /* Adjust height to make the board smaller */
+            text-align: center;
+            font-size: 24px; /* Make the font size smaller */
+            margin-top: 0; /* Remove any margin at the top */
+        }
+        td {
+            border: 2px solid #333;
+            width: 20%; /* Make each square take up the same size */
+            height: 20%; /* Make each square take up the same size */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            background-color: white;
+            font-weight: bold;
+            border-radius: 10px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            padding: 20px; /* Added padding to create space between text and edges */
+            text-align: center;
+        }
+        td:not(.marked):hover {
+            background-color: #f1f1f1;
+        }
+        .marked {
+            background-color: red;
+            color: white;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+        }
+        @keyframes bingoAnimation {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        #bingoMessage {
+            display: none;
+            font-size: 120px; /* Make the text much bigger */
+            font-weight: bold;
+            color: white;
+            margin-top: 20px;
+            animation: bingoAnimation 0.5s infinite alternate, colorChange 1s infinite alternate; /* Looping color change */
+            position: absolute;
+            z-index: 10;
+            transform: rotate(30deg); /* Angle the text */
+        }
+        @keyframes colorChange {
+            0% { color: red; }
+            100% { color: white; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Dansk Folkeparti reklamevideo bingo!</h1>
+    <table id="bingoBoard"></table>
+    <div id="bingoMessage">BINGO!</div>
+    
+    <script>
+        function generateBingoBoard() {
+            const table = document.getElementById("bingoBoard");
+            table.innerHTML = "";
+            
+            // List of words to randomize
+            const words = [
+                "Politisk-leder filmet i frøperspektiv", "Håndværk eller traditionelt arbejde", "Omsorg for ældre", "Skib ude på havet", "Jellingestenene", 
+                "Pludseligt cut til uroligheder", "Landevej med bil kørende", "Gårddyr på græs", "Lokal købmand", "Kartoffel 🥔",
+                "Glade børn", "Sankthansaften bål", "Dansk politi", "Vikinger", "Bajer",
+                "Overdrevet fredeligt musik", "Vinterlandskab", "Børn der spiller fodbold", "Danske broer", "Pensionister der cykler",
+                "Dansktop-koncert", "Reference til EM 1992", "Soldater i tjeneste", "Dansk middag", "Ingen klip af Danmark i regn"
+            ];
+            
+            let cells = [];
+            
+            for (let row = 0; row < 5; row++) {
+                let tr = document.createElement("tr");
+                for (let col = 0; col < 5; col++) {
+                    let td = document.createElement("td");
+                    
+                    if (row === 2 && col === 2) {
+                        td.textContent = "Flagrende Dannebrog"; // This is the center (free space)
+                    } else {
+                        let randomIndex = Math.floor(Math.random() * words.length);
+                        td.textContent = words.splice(randomIndex, 1)[0];  // Remove used word
+                    }
+                    
+                    td.addEventListener("click", function() {
+                        this.classList.toggle("marked");
+                        checkBingo();
+                    });
+                    
+                    tr.appendChild(td);
+                    cells.push(td);
+                }
+                table.appendChild(tr);
+            }
+        }
+        
+        function checkBingo() {
+            const table = document.getElementById("bingoBoard");
+            const rows = table.getElementsByTagName("tr");
+            let bingo = false;
+            
+            // Check rows
+            for (let row of rows) {
+                if ([...row.children].every(cell => cell.classList.contains("marked"))) {
+                    bingo = true;
+                }
+            }
+            
+            // Check columns
+            for (let col = 0; col < 5; col++) {
+                if ([...rows].map(row => row.children[col]).every(cell => cell.classList.contains("marked"))) {
+                    bingo = true;
+                }
+            }
+            
+            // Check diagonals
+            if ([0, 1, 2, 3, 4].every(i => rows[i].children[i].classList.contains("marked")) ||
+                [0, 1, 2, 3, 4].every(i => rows[i].children[4 - i].classList.contains("marked"))) {
+                bingo = true;
+            }
+            
+            const bingoMessage = document.getElementById("bingoMessage");
+            if (bingo) {
+                // Position the bingo message at the center (2, 2) square
+                const centerCell = rows[2].children[2];
+                const cellRect = centerCell.getBoundingClientRect();
+                bingoMessage.style.left = `${cellRect.left + window.scrollX + cellRect.width / 2 - bingoMessage.offsetWidth / 2}px`;
+                bingoMessage.style.top = `${cellRect.top + window.scrollY + cellRect.height / 2 - bingoMessage.offsetHeight / 2}px`;
+
+                bingoMessage.style.display = "block";
+                setTimeout(function() {
+                    bingoMessage.style.display = "none";
+                }, 3000); // Hide after 3 seconds
+            } else {
+                bingoMessage.style.display = "none";
+            }
+        }
+        
+        window.onload = generateBingoBoard;
+    </script>
+</body>
+</html>
