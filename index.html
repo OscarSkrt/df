@@ -3,72 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>DF Bingo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
             background-image: url('backgroundimage.jpg'); /* Your background image */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             height: 100vh;
             text-align: center;
-            padding-top: 10px;
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
+            padding-top: 20px;
+        }
+
+        h1 {
+            font-size: 40px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
         }
 
         table {
             border-collapse: collapse;
-            width: 50%;
-            height: 50%;
+            width: 40%; /* Slightly smaller to keep it clean */
             text-align: center;
-            font-size: 24px;
-            margin-top: 0;
-            background-color: white; /* Set table background to white */
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Subtle white background */
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
 
         td {
-            border: 2px solid #333;
+            border: 2px solid #ddd;
             width: 20%;
             height: 20%;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            background-color: white; /* Set each cell's background to white */
-            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            background-color: #f9f9f9;
+            font-weight: 600;
             border-radius: 10px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            text-align: center;
+            padding: 25px;
+            font-size: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         td:not(.marked):hover {
-            background-color: #f1f1f1;
+            background-color: #e0e0e0;
+            transform: scale(1.05);
         }
 
         .marked {
-            background-color: red;
+            background-color: #c0392b;
             color: white;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+            box-shadow: 0 0 12px rgba(192, 57, 43, 0.6);
         }
 
         @keyframes bingoAnimation {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.5; }
-            100% { transform: scale(1); opacity: 1; }
+            0% { 
+                transform: scale(1) rotate(0deg); 
+                opacity: 1; 
+            }
+            50% { 
+                transform: scale(1.5) rotate(180deg); 
+                opacity: 0.6; 
+            }
+            100% { 
+                transform: scale(1) rotate(360deg); 
+                opacity: 1; 
+            }
         }
 
         #bingoMessage {
             display: none;
-            font-size: 40px;
-            font-weight: bold;
-            color: green;
-            margin-top: 20px;
+            font-size: 150px;
+            font-weight: 600;
+            color: red;
+            margin-top: -500px;
             animation: bingoAnimation 1s infinite;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
@@ -84,7 +105,7 @@
             
             // List of words to randomize
             const words = [
-                "Politisk-leder filmet i frøperspektiv", "Håndværk eller traditionelt arbejde", "Omsorg for ældre", "Skib ude på havet", "Jellingestenene", 
+                "Politisk-leder filmet i frøperspektiv", "Håndværk eller traditionelt arbejde", "Omsorg for ældre", "Skib ude på havet", "Jellingstenenene", 
                 "Pludseligt cut til uroligheder", "Landevej med bil kørende", "Gårddyr på græs", "Lokal købmand", "Kartoffel 🥔",
                 "Glade børn", "Sankthansaften bål", "Dansk politi", "Vikinger", "Bajer",
                 "Overdrevet fredeligt musik", "Vinterlandskab", "Børn der spiller fodbold", "Danske broer", "Pensionister der cykler",
@@ -145,6 +166,9 @@
             const bingoMessage = document.getElementById("bingoMessage");
             if (bingo) {
                 bingoMessage.style.display = "block";
+                setTimeout(function() {
+                    bingoMessage.style.display = "none"; // Hide after 5 seconds
+                }, 5000); // 5000 milliseconds = 5 seconds
             } else {
                 bingoMessage.style.display = "none";
             }
