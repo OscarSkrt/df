@@ -7,65 +7,68 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
+            background-image: url('backgroundimage.jpg'); /* Your background image */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Align content to the top */
+            justify-content: flex-start;
             height: 100vh;
             text-align: center;
-            padding-top: 10px; /* Reduced padding at the top */
-            background-color: #f8f9fa;
-            font-family: 'Roboto', sans-serif; /* Modern sans-serif font */
-            margin: 0; /* Remove any default margin */
+            padding-top: 10px;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
         }
+
         table {
             border-collapse: collapse;
-            width: 50%; /* Adjust width to make the board smaller */
-            height: 50%; /* Adjust height to make the board smaller */
+            width: 50%;
+            height: 50%;
             text-align: center;
-            font-size: 24px; /* Make the font size smaller */
-            margin-top: 0; /* Remove any margin at the top */
+            font-size: 24px;
+            margin-top: 0;
+            background-color: white; /* Set table background to white */
         }
+
         td {
             border: 2px solid #333;
-            width: 20%; /* Make each square take up the same size */
-            height: 20%; /* Make each square take up the same size */
+            width: 20%;
+            height: 20%;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            background-color: white;
+            background-color: white; /* Set each cell's background to white */
             font-weight: bold;
             border-radius: 10px;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-            padding: 20px; /* Added padding to create space between text and edges */
+            padding: 20px;
             text-align: center;
         }
+
         td:not(.marked):hover {
             background-color: #f1f1f1;
         }
+
         .marked {
             background-color: red;
             color: white;
             box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
         }
+
         @keyframes bingoAnimation {
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.5); opacity: 0.5; }
             100% { transform: scale(1); opacity: 1; }
         }
+
         #bingoMessage {
             display: none;
-            font-size: 120px; /* Make the text much bigger */
+            font-size: 40px;
             font-weight: bold;
-            color: white;
+            color: green;
             margin-top: 20px;
-            animation: bingoAnimation 0.5s infinite alternate, colorChange 1s infinite alternate; /* Looping color change */
-            position: absolute;
-            z-index: 10;
-            transform: rotate(30deg); /* Angle the text */
-        }
-        @keyframes colorChange {
-            0% { color: red; }
-            100% { color: white; }
+            animation: bingoAnimation 1s infinite;
         }
     </style>
 </head>
@@ -96,7 +99,7 @@
                     let td = document.createElement("td");
                     
                     if (row === 2 && col === 2) {
-                        td.textContent = "Flagrende Dannebrog"; // This is the center (free space)
+                        td.textContent = "Flagrende Dannebrog";
                     } else {
                         let randomIndex = Math.floor(Math.random() * words.length);
                         td.textContent = words.splice(randomIndex, 1)[0];  // Remove used word
@@ -141,16 +144,7 @@
             
             const bingoMessage = document.getElementById("bingoMessage");
             if (bingo) {
-                // Position the bingo message at the center (2, 2) square
-                const centerCell = rows[2].children[2];
-                const cellRect = centerCell.getBoundingClientRect();
-                bingoMessage.style.left = `${cellRect.left + window.scrollX + cellRect.width / 2 - bingoMessage.offsetWidth / 2}px`;
-                bingoMessage.style.top = `${cellRect.top + window.scrollY + cellRect.height / 2 - bingoMessage.offsetHeight / 2}px`;
-
                 bingoMessage.style.display = "block";
-                setTimeout(function() {
-                    bingoMessage.style.display = "none";
-                }, 3000); // Hide after 3 seconds
             } else {
                 bingoMessage.style.display = "none";
             }
