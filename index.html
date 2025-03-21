@@ -107,11 +107,9 @@
             const words = [
                 "Partiformand filmet i frøperspektiv", "Håndværk eller traditionelt arbejde", "Omsorg for ældre", "Skib ude på havet", "Jellingstenenene", 
                 "Pludseligt cut til uroligheder", "Landevej med bil kørende", "Gårddyr på græs", "Lokal købmand", "Kartoffel 🥔",
-                "Glade børn", "Sankthansaften bål", "Dansk politi", "Vikinger", "Bajer",
+                "Glade børn", "Bedstefar peger på sort-hvidt foto", "Dansk politi", "Vikinger", "Ordet 'tryg' eller lignende bliver nævnt",
                 "Overdrevet fredeligt musik", "Vinterlandskab", "Børn der spiller fodbold", "Danske broer", "Pensionister der cykler",
                 "Dansktop-koncert", "Reference til EM 1992", "Soldater i tjeneste", "Dansk middag", "Ingen klip af Danmark i regn",
-                "Ordet 'tryg' eller lignende nævnt", "Landmand smiler i traktor", "Nationaldragt", "Håndtryk i slowmotion",
-                "Ordet 'sammenhold' bliver nævnt", "Bedstefar peger på sort-hvidt foto", "Smed i slowmotion"
             ];
             
             let cells = [];
@@ -122,7 +120,7 @@
                     let td = document.createElement("td");
                     
                     if (row === 2 && col === 2) {
-                        td.textContent = "Flagrende Dannebrog (FREE SPACE)";
+                        td.textContent = "Flagrende Dannebrog";
                     } else {
                         let randomIndex = Math.floor(Math.random() * words.length);
                         td.textContent = words.splice(randomIndex, 1)[0];  // Remove used word
